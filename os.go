@@ -11,25 +11,21 @@ import (
 )
 
 func getLinuxInfo () (map[string]string, error) {
-	if _, err := os.Stat("/etc/os-release"); err == nil {
-		f, err := os.Open("/etc/os-release")
-		if err != nil {
-			return nil, err
-		}
+	if f, err := os.Open("/etc/os-release"); err == nil {
 		defer f.Close()
 		s := bufio.NewScanner(f)
 		m := make(map[string]string)
 		for s.Scan() {
-			slc := strings.Split(s.Text(),"=")
-			m[strings.ToLower(slc[0])] = slc[1]
+			a := strings.Split(s.Text(),"=")
+			m[strings.ToLower(a[0])] = a[1]
 		}
 		if err := s.Err(); err != nil {
 			return nil, err
 		}
+		return m, nil
 	} else {
 		return nil, err
 	}
-	panic("never must be here")
 }
 
 func GetOsInfo() (map[string]string, error) {
@@ -37,11 +33,11 @@ func GetOsInfo() (map[string]string, error) {
 		err := errors.New("is not implemented")
 		return nil, err
 	}
-	m, err := getLinuxInfo()
-	if err != nil {
+	if m, err := getLinuxInfo(); err == nil {
+		return m, nil
+	} else {
 		return nil, err
 	}
-	return m, nil
 }
 
 //const (
@@ -68,7 +64,7 @@ func GetOsInfo() (map[string]string, error) {
 //		log.Fatal(err)
 //	}
 //	defer file.Close()
-	
+
 //	scanner := bufio.NewScanner(file)
 //	os_arg := make(map[string]string)
 //	for scanner.Scan() {
@@ -76,16 +72,16 @@ func GetOsInfo() (map[string]string, error) {
 //		os_arg[strings.ToLower(s[0])] = s[1]
 ////    	if strings.HasPrefix(scanner.Text(), "NAME") {
 ////			fmt.Println(strings.ToLower(strings.TrimPrefix(scanner.Text(),"NAME=")))
-////		}		
+////		}
 ////    	if strings.HasPrefix(scanner.Text(), "ID_LIKE") {
 ////			fmt.Println(strings.ToLower(strings.TrimPrefix(scanner.Text(),"ID_LIKE=")))
-////		}		
+////		}
 ////    	if strings.HasPrefix(scanner.Text(), "ID") {
 ////			fmt.Println(strings.ToLower(strings.TrimPrefix(scanner.Text(),"ID=")))
 ////		}
 ////		if strings.HasPrefix(scanner.Text(), "VERSION_ID") {
 ////			fmt.Println(strings.ToLower(strings.TrimPrefix(scanner.Text(),"VERSION_ID=")))
-////		}		
+////		}
 //	}
 //	fmt.Println(os_arg)
 
