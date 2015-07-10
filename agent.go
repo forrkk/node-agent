@@ -21,4 +21,7 @@ func main() {
 		fmt.Println(m["docker_version"])
 		fmt.Println(m["docker_running"])
 	}
+	p := []int{22,23}
+	fmt.Println(IsRoot())
+	fmt.Println(GetPortAvailability(p))
 }

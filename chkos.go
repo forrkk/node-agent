@@ -2,11 +2,9 @@ package main
 
 import (
 	"runtime"
-//	"log"
 	"bufio"
 	"io/ioutil"
 	"os"
-//	"fmt"
 	"strings"
 	"errors"
 )
