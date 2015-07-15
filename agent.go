@@ -19,10 +19,9 @@ func main() {
 	if !IsRoot() {
 		log.Fatalln("must be root")
 	}
-	err := GetPortAvailability([]int{22, 80, 443})
-	if err == nil {
-		fmt.Println(err)
-	}
+	err := GetPortAvailability([]int{-1, 22, 80, 443, 70000, 8080, 0})
+	fmt.Println(err)
+	GetKey()
 
 //	if m, err := GetOsInfo(); err == nil {
 //		fmt.Println(m["type"])
