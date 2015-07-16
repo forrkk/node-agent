@@ -2,13 +2,21 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"runtime"
+	"os"
+//	"os/signal"
+//	"syscall"
 )
 
+func init() {
+//	if configFile == ""
+	if len(os.Args) == 2 {
+		config.RegToken = string(os.Args[1])
+	}
+}
+
 func main() {
-	//os := make(map[string]string)
 	switch runtime.GOOS {
 	case "linux": break
 	default: log.Fatalln("not implemented")
@@ -19,9 +27,31 @@ func main() {
 	if !IsRoot() {
 		log.Fatalln("must be root")
 	}
-	err := GetPortAvailability([]int{-1, 22, 80, 443, 70000, 8080, 0})
-	fmt.Println(err)
-	GetKey()
+	if !config.Initialised && config.RegToken != "" {
+		resp, err := registerNode()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		if resp.Error.Code != 0 {
+			log.Fatalln(resp.Error.Code)
+		}
+		config.AuthKey = resp.Result.AuthKey
+		config.NodeUUID = resp.Result.NodeUUID
+		config.Initialised = true
+	}
+//	data := []byte(`{"token":"goUVPEJzYozhnXM4aJNG6kzS6YuKRUs8DLorouxxCmSb4hgB8ji6XEoMrnc22FjP"}`)
+//	b, err := SendReq("POST", "https://api.wodby.com/api/v1/nodes/register", data, nil)
+//	fmt.Println(string(b), err)
+	//err := GetPortAvailability([]int{-1, 22, 80, 443, 70000, 8080, 0})
+	//fmt.Println(err)
+	//GetKey()
+	initConfig()
+	WriteConfig()
+	go checkVersion()
+//	c := make(chan os.Signal, 1)
+//	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGTERM)
+//	<-c
+	select{}
 
 //	if m, err := GetOsInfo(); err == nil {
 //		fmt.Println(m["type"])
