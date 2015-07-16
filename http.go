@@ -35,6 +35,8 @@ func SendReq(method, url string, data []byte, headers map[string]string) ([]byte
 		}
 		fmt.Println(string(b))
 		return b, nil
+	default:
+		break
 	}
 	panic("unreachable")
 }
