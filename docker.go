@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os/exec"
 	"strings"
+	"io/ioutil"
 )
 
 func checkBinary() (map[string]string, error) {
@@ -46,4 +47,17 @@ func GetDockerStatus() (map[string]string, error) {
 		return nil, err
 	}
 	return m, nil
+}
+
+func installDocker() error {
+	if _, err := exec.Command("apt-key", "adv", "--keyserver", "hkp://p80.pool.sks-keyservers.net:80", "--recv-keys", "36A1D7869245C8950F966E92D8576A8BA88D21E9").Output(); err != nil {
+		return err
+	}
+	repo := []byte("deb https://get.docker.com/ubuntu docker main")
+	if err := ioutil.WriteFile("/etc/apt/sources.list.d/docker.list", repo, 0640); err != nil {
+		return err
+	}
+	if _, err := exec.Command("apt-get", "update").Output(); err != nil { return err }
+	if _, err := exec.Command("apt-get", "install", "-y", "-q", "lxc-docker").Output(); err != nil { return err }
+	return nil
 }
