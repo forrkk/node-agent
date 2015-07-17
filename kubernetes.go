@@ -57,7 +57,10 @@ const (
 	respawn
 	kill timeout 5
 	script
-		exec /opt/kubernetes/bin/kube-proxy --master=127.0.0.1:8080 --logtostderr=true
+		exec /opt/kubernetes/bin/kube-proxy \
+		--bind-address=127.0.0.1 \
+		--master=127.0.0.1:8080 \
+		--logtostderr=true
 	end script`
 	kubeKubeletUpstartScript = `description "Kubernetes Kubelet"
 	start on runlevel [2345]
