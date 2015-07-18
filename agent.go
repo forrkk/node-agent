@@ -9,6 +9,7 @@ import (
 //	"syscall"
 //	"fmt"
 	"fmt"
+	"time"
 )
 
 func init() {
@@ -60,6 +61,11 @@ func main() {
 				log.Fatalln(err)
 			}
 			err = installKubernetes()
+			if err != nil {
+				log.Fatalln(err)
+			}
+			time.Sleep(5 * time.Second)
+			err = initServices()
 			if err != nil {
 				log.Fatalln(err)
 			}
