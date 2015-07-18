@@ -40,6 +40,15 @@ func main() {
 			case "ubuntu": break
 			default: log.Fatalln("not implemented")
 			}
+			if config.ReqPorts == nil {
+				config.ReqPorts = append([]int, 22, 80, 443)
+			}
+			ps := GetPortAvailability(config.ReqPorts)
+			for k, v := range ps {
+				if !v {
+					log.Fatalln("port %s isnot free, but necessary", k)
+				}
+			}
 			doc, err := GetDockerStatus()
 			if err != nil {
 				if err = installDocker(); err != nil {
