@@ -41,7 +41,7 @@ func main() {
 			default: log.Fatalln("not implemented")
 			}
 			if config.ReqPorts == nil {
-				config.ReqPorts = append([]int, 22, 80, 443)
+				config.ReqPorts = append(config.ReqPorts, 22, 80, 443)
 			}
 			ps := GetPortAvailability(config.ReqPorts)
 			for k, v := range ps {
