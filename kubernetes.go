@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"text/template"
+	"fmt"
 )
 
 const (
@@ -167,8 +168,9 @@ func installKubelet() error {
 	if err != nil {
 		return err
 	}
-	_, err = exec.Command("service", "kube-kubelet", "start").Output()
+	tmp, err := exec.Command("service", "kube-kubelet", "start").Output()
 	if err != nil {
+		fmt.Println(tmp)
 		return err
 	}
 	return nil
