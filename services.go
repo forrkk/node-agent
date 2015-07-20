@@ -88,7 +88,6 @@ func initServices() error {
 	if err != nil {
 		return err
 	}
-	return nil
 	err = ioutil.WriteFile("/opt/wodby/etc/wodby_svc.json", []byte(wodbySvc), 0644)
 	if err != nil {
 		return err

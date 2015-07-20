@@ -7,8 +7,6 @@ import (
 	"os"
 //	"os/signal"
 //	"syscall"
-//	"fmt"
-	"fmt"
 	"time"
 )
 
@@ -50,7 +48,7 @@ func main() {
 					log.Fatalln("port %s isnot free, but necessary", k)
 				}
 			}
-			doc, err := GetDockerStatus()
+			_, err = GetDockerStatus()
 			if err != nil {
 				if err = installDocker(); err != nil {
 					log.Fatalln(err)
@@ -69,7 +67,6 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			fmt.Println(doc)
 			resp, err := registerNode()
 			if err != nil {
 				log.Fatalln(err)
