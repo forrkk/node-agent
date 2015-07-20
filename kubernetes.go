@@ -159,7 +159,12 @@ func installKubernetes() error {
 
 func installKubelet() error {
 	t := template.Must(template.New("kubelet").Parse(kubeKubeletUpstartScript))
-	err := t.Execute(os.Stdout, config)
+	f, err := os.OpenFile("/etc/init/kube-kubelet.conf", os.O_CREATE|os.O_RDWR, 0644)
+	defer f.Close()
+	if err != nil {
+		return err
+	}
+	err = t.Execute(f, config)
 //	err := ioutil.WriteFile("/etc/init/kube-kubelet.conf", []byte(kubeKubeletUpstartScript), 0644)
 //	if err != nil {
 //		return err
