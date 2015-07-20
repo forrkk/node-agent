@@ -31,7 +31,7 @@ const (
               "containers": [
                 {
                   "name": "edge",
-                  "image": "sfo.registry.wodby.com/wodby/edge:0.1",
+                  "image": "wodby/edge:0.1",
                   "imagePullPolicy": "Always",
                   "privileged": true,
                   "ports": [
@@ -57,7 +57,7 @@ const (
                 },
                 {
                   "name": "agent",
-                  "image": "sfo.registry.wodby.com/wodby/agent:0.1",
+                  "image": "wodby/agent:0.1",
                   "imagePullPolicy": "Always",
                   "env": [
                     {
@@ -91,7 +91,7 @@ const (
                 },
                 {
                   "name": "skydns",
-                  "image": "sfo.registry.wodby.com/wodby/skydns:0.1",
+                  "image": "wodby/skydns:0.1",
                   "imagePullPolicy": "Always",
                   "ports": [
                     {
@@ -108,7 +108,7 @@ const (
                 },
                 {
                   "name": "kube2sky",
-                  "image": "sfo.registry.wodby.com/wodby/kube2sky:0.1",
+                  "image": "wodby/kube2sky:0.1",
                   "imagePullPolicy": "Always"
                 }
               ],
