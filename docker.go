@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"strings"
 	"io/ioutil"
+	"os"
 )
 
 func checkBinary() (map[string]string, error) {
@@ -59,5 +60,18 @@ func installDocker() error {
 	}
 	if _, err := exec.Command("apt-get", "update").Output(); err != nil { return err }
 	if _, err := exec.Command("apt-get", "install", "-y", "-q", "lxc-docker").Output(); err != nil { return err }
+	f, err := os.OpenFile("/etc/default/docker", os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		return nil
+	}
+	_, err = f.WriteString(`DOCKER_OPTS="--insecure-registry sfo.registry.wodby.com"`)
+	if err != nil {
+		return err
+	}
+	f.Close()
+	_, err = exec.Command("service", "docker", "restart").Output()
+	if err != nil {
+		return err
+	}
 	return nil
 }
