@@ -150,7 +150,7 @@ func initServices() error {
 		return err
 	}
     config.ETCDIP = string(buf)
-    _, err = exec.Command("curl", "http://127.0.0.1:4001/v2/keys/skydns/local/wodby/wodby/etcd", "-XPUT", "-d", `value={"host":"`+config.ETCDIP+`","priority":10,"weight":10,"ttl":300}`)
+    _, err = exec.Command("curl", "http://127.0.0.1:4001/v2/keys/skydns/local/wodby/wodby/etcd", "-XPUT", "-d", `value={"host":"`+config.ETCDIP+`","priority":10,"weight":10,"ttl":300}`).Output()
 	if err != nil {
 		return err
 	}
