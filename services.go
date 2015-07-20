@@ -95,6 +95,12 @@ const (
         dnsSvcIp=$(/opt/kubernetes/bin/kubectl --namespace=wodby get svc wodby-svc | grep wodby-svc | awk '{print $4}')
       done
       echo "${dnsSvcIp}" > /opt/wodby/etc/dns_svc_ip`
+    wodbyGetETCDSvcIP = `#!/bin/sh
+      while [ -z ${etcSvcIp} ];do
+        sleep 1
+        etcSvcIp=$(/opt/kubernetes/bin/kubectl --namespace=wodby get svc etcd | grep etcd | awk '{print $4}')
+      done
+      echo "${etcSvcIp}" > /opt/wodby/etc/etcd_svc_ip`
 )
 
 func initServices() error {
@@ -131,6 +137,23 @@ func initServices() error {
 	if err != nil {
 		return err
 	}
+    err = ioutil.WriteFile("/opt/kubernetes/bin/getetcdsvcip", []byte(wodbyGetETCDSvcIP), 0755)
+	if err != nil {
+		return err
+	}
+	_, err = exec.Command("/opt/kubernetes/bin/getetcdsvcip").Output()
+	if err != nil {
+		return err
+	}
+    buf, err := ioutil.ReadFile("/opt/wodby/etc/etcd_svc_ip")
+    if err != nil {
+		return err
+	}
+    config.ETCDIP = string(buf)
+    _, err = exec.Command("curl", "http://127.0.0.1:4001/v2/keys/skydns/local/wodby/wodby/etcd", "-XPUT", "-d", `value={"host":"`+config.ETCDIP+`","priority":10,"weight":10,"ttl":300}`)
+	if err != nil {
+		return err
+	}
     err = ioutil.WriteFile("/opt/kubernetes/bin/getdnssvcip", []byte(wodbyGetDNSSvcIP), 0755)
 	if err != nil {
 		return err
@@ -139,7 +162,7 @@ func initServices() error {
 	if err != nil {
 		return err
 	}
-    buf, err := ioutil.ReadFile("/opt/wodby/etc/dns_svc_ip")
+    buf, err = ioutil.ReadFile("/opt/wodby/etc/dns_svc_ip")
     if err != nil {
 		return err
 	}
