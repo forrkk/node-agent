@@ -160,7 +160,6 @@ func installKubernetes() error {
 
 func installKubelet() error {
 	f, err := os.OpenFile("/etc/init/kube-kubelet.conf", os.O_CREATE|os.O_RDWR, 0644)
-	defer f.Close()
 	if err != nil {
 		return err
 	}
@@ -168,9 +167,9 @@ func installKubelet() error {
 	if err != nil {
 		return err
 	}
-	tmp, err := exec.Command("service", "kube-kubelet", "start").Output()
+	f.Close()
+	_, err = exec.Command("service", "kube-kubelet", "start").Output()
 	if err != nil {
-		fmt.Println(tmp)
 		return err
 	}
 	return nil
