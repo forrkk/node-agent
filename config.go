@@ -16,6 +16,7 @@ type Config struct {
 	HeartBeat uint16 `toml:"update_interval"`
 	Initialised bool `toml:"initialised"`
 	ReqPorts []int `toml:"requred_ports"`
+	DNSIP string `toml:"dns_svc_ip"`
 }
 
 var (

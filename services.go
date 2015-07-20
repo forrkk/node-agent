@@ -135,5 +135,10 @@ func initServices() error {
 	if err != nil {
 		return err
 	}
+	_, err = exec.Command("/opt/kubernetes/bin/getdnssvcip").Output()
+	if err != nil {
+		return err
+	}
+    config.DNSIP = "34.34.35.35"
 	return nil
 }

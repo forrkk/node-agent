@@ -67,6 +67,10 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
+			err = installKubelet()
+			if err != nil {
+				log.Fatalln(err)
+			}
 			resp, err := registerNode()
 			if err != nil {
 				log.Fatalln(err)

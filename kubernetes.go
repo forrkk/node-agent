@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"io"
 	"io/ioutil"
+	"text/template"
 )
 
 const (
@@ -83,7 +84,9 @@ const (
         --housekeeping_interval=1m \
         --max_housekeeping_interval=1h \
         --node-status-update-frequency=60s \
-        --sync-frequency=15s
+        --sync-frequency=15s \
+        --cluster-domain=wodby.local \
+        --cluster-dns={{.DNSIP}}
 	end script`
 )
 
@@ -135,10 +138,6 @@ func installKubernetes() error {
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile("/etc/init/kube-kubelet.conf", []byte(kubeKubeletUpstartScript), 0644)
-	if err != nil {
-		return err
-	}
 	_, err = exec.Command("service", "kube-apiserver", "start").Output()
 	if err != nil {
 		return err
@@ -155,9 +154,19 @@ func installKubernetes() error {
 	if err != nil {
 		return err
 	}
-	_, err = exec.Command("service", "kube-kubelet", "start").Output()
-	if err != nil {
-		return err
-	}
 	return nil
+}
+
+func installKubelet() error {
+	t := template.Must(template.New("kubelet").Parse(kubeKubeletUpstartScript))
+	err := t.Execute(os.Stdout, config)
+//	err := ioutil.WriteFile("/etc/init/kube-kubelet.conf", []byte(kubeKubeletUpstartScript), 0644)
+//	if err != nil {
+//		return err
+//	}
+//	_, err = exec.Command("service", "kube-kubelet", "start").Output()
+//	if err != nil {
+//		return err
+//	}
+	return err
 }
