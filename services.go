@@ -155,6 +155,10 @@ func initServices() error {
 	if err != nil {
 		return err
 	}
+    _, err = exec.Command("curl", "http://127.0.0.1:4001/v2/keys/wodby/services/edge/worker_processes", "-XPUT", "-d", `value=1`).Output()
+	if err != nil {
+		return err
+	}
     err = ioutil.WriteFile("/opt/kubernetes/bin/getdnssvcip", []byte(wodbyGetDNSSvcIP), 0755)
 	if err != nil {
 		return err
