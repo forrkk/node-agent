@@ -1,7 +1,6 @@
 package main
 import (
 	"encoding/json"
-	"fmt"
 	"time"
 )
 
@@ -34,9 +33,7 @@ func checkVersion() {
 		time.Sleep(60 * time.Second)
 		ver, _ = getVersion()
 		if ver != "" && ver != Version {
-			fmt.Println("need upgrade")
-		} else {
-			fmt.Println("version is latest")
+			selfUpgrade(ver)
 		}
 	}
 }

@@ -5,13 +5,10 @@ import (
 	"log"
 	"runtime"
 	"os"
-//	"os/signal"
-//	"syscall"
 	"time"
 )
 
 func init() {
-//	if configFile == ""
 	if len(os.Args) == 2 {
 		config.RegToken = string(os.Args[1])
 	}
@@ -85,38 +82,20 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
+			updateConfig()
+			err = SelfInstall()
+			if err != nil {
+				log.Fatalln(err)
+			}
+			err = SelfStart()
+			if err != nil {
+				log.Fatalln(err)
+			}
+			os.Exit(0)
 		} else {
 			log.Fatalln("the node isn't initialised and token wasn't provided")
 		}
 	}
-//	data := []byte(`{"token":"goUVPEJzYozhnXM4aJNG6kzS6YuKRUs8DLorouxxCmSb4hgB8ji6XEoMrnc22FjP"}`)
-//	b, err := SendReq("POST", "https://api.wodby.com/api/v1/nodes/register", data, nil)
-//	fmt.Println(string(b), err)
-	//err := GetPortAvailability([]int{-1, 22, 80, 443, 70000, 8080, 0})
-	//fmt.Println(err)
-	//GetKey()
-
-	WriteConfig()
-	updateConfig()
-//	go checkVersion()
-//	select{}
-
-//	if m, err := GetOsInfo(); err == nil {
-//		fmt.Println(m["type"])
-//		fmt.Println(m["arch"])
-//		fmt.Println(m["pretty_name"])
-//		fmt.Println(m["id"])
-//		fmt.Println(m["version_id"])
-//		fmt.Println(m["id_like"])
-//		fmt.Println(m["kernel_ver"])
-//		fmt.Println(m["init1"])
-//	}
-//	if m, err := GetDockerStatus(); err == nil {
-//		fmt.Println(m["docker_path"])
-//		fmt.Println(m["docker_version"])
-//		fmt.Println(m["docker_running"])
-//	}
-//	p := []int{22,23}
-//	fmt.Println(IsRoot())
-//	fmt.Println(GetPortAvailability(p))
+go checkVersion()
+select{}
 }

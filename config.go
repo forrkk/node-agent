@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"os"
 	"log"
-//	"io/ioutil"
-//	"bytes"
 )
 
 type Config struct {
@@ -54,12 +52,6 @@ func initConfig() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-}
-
-
-func WriteConfig () {
-	//config.Initialised = true
-	fmt.Println(config)
 }
 
 func updateConfig() (bool, error) {
