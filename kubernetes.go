@@ -6,7 +6,6 @@ import (
 	"io"
 	"io/ioutil"
 	"text/template"
-	"fmt"
 )
 
 const (
