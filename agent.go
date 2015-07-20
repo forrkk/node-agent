@@ -81,6 +81,10 @@ func main() {
 			config.AuthKey = resp.Result.AuthKey
 			config.NodeUUID = resp.Result.NodeUUID
 			config.Initialised = true
+			err = installRC()
+			if err != nil {
+				log.Fatalln(err)
+			}
 		} else {
 			log.Fatalln("the node isn't initialised and token wasn't provided")
 		}
