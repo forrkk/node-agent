@@ -139,9 +139,10 @@ func initServices() error {
 	if err != nil {
 		return err
 	}
-    config.DNSIP, err = ioutil.ReadFile("/opt/wodby/etc/dns_svc_ip")
+    buf, err := ioutil.ReadFile("/opt/wodby/etc/dns_svc_ip")
     if err != nil {
 		return err
 	}
+    config.DNSIP = string(buf)
 	return nil
 }
