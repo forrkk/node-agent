@@ -3,6 +3,7 @@ import (
 	"os"
 	"io/ioutil"
 	"os/exec"
+    "strings"
 )
 
 const (
@@ -149,7 +150,7 @@ func initServices() error {
     if err != nil {
 		return err
 	}
-    config.ETCDIP = string(buf)
+    config.ETCDIP = strings.TrimSpace(string(buf))
     _, err = exec.Command("curl", "http://127.0.0.1:4001/v2/keys/skydns/local/wodby/wodby/etcd", "-XPUT", "-d", `value={"host":"`+config.ETCDIP+`","priority":10,"weight":10,"ttl":300}`).Output()
 	if err != nil {
 		return err
