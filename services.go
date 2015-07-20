@@ -33,6 +33,27 @@ const (
           ]
         }
       }`
+    wodbyETCDenp = `{
+        "kind": "Endpoints",
+        "apiVersion": "v1beta3",
+        "metadata": {
+          "name": "etcd"
+        },
+        "subsets": [
+          {
+            "addresses": [
+              { "IP": "127.0.0.1" }
+            ],
+            "ports": [
+              {
+                "name": "etcd",
+                "protocol": "TCP",
+                "port": 4001
+              }
+            ]
+          }
+        ]
+      }`
 	wodbySvc = `{
         "kind": "Service",
         "apiVersion": "v1beta3",
@@ -68,6 +89,12 @@ const (
           ]
         }
       }`
+    wodbyGetDNSSvcIP = `#!/bin/sh
+      while [ -z ${dnsSvcIp} ];do
+        sleep 1
+        dnsSvcIp=$(/opt/kubernetes/bin/kubectl --namespace=wodby get svc wodby-svc | grep wodby-svc | awk '{print $4}')
+      done
+      echo "${dnsSvcIp}" > /opt/wodby/etc/dns_svc_ip`
 )
 
 func initServices() error {
@@ -88,11 +115,23 @@ func initServices() error {
 	if err != nil {
 		return err
 	}
+	err = ioutil.WriteFile("/opt/wodby/etc/etcd_enp.json", []byte(wodbyETCDenp), 0644)
+	if err != nil {
+		return err
+	}
+	_, err = exec.Command("/opt/kubernetes/bin/kubectl", "--namespace=wodby", "create", "-f", "/opt/wodby/etc/etcd_enp.json").Output()
+	if err != nil {
+		return err
+	}
 	err = ioutil.WriteFile("/opt/wodby/etc/wodby_svc.json", []byte(wodbySvc), 0644)
 	if err != nil {
 		return err
 	}
 	_, err = exec.Command("/opt/kubernetes/bin/kubectl", "--namespace=wodby", "create", "-f", "/opt/wodby/etc/wodby_svc.json").Output()
+	if err != nil {
+		return err
+	}
+    err = ioutil.WriteFile("/opt/kubernetes/bin/getdnssvcip", []byte(wodbyGetDNSSvcIP), 0755)
 	if err != nil {
 		return err
 	}
