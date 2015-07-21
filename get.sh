@@ -1,8 +1,10 @@
 #!/bin/sh
 
 agent_dir='/opt/wodby'
+agent_bin_dir="${agent_dir}/bin"
+agent_etc_dir="${agent_dir}/etc"
 agent_version='0.0.1'
-agent_url="http://someurl/agent/${agent_version}/agent.tar.gz"
+agent_url="https://github.com/Wodby/node-agent/releases/download/v${agent_version}/node-agent"
 
 command_exists() {
 	command -v "$@" > /dev/null 2>&1
@@ -22,7 +24,7 @@ if [ -z "${curl}" ];then
 fi
 
 [ ! -d "${agent_dir}" ] && mkdir -p "${agent_dir}"
-${curl} ${agent_url} | tar xvz -C "${agent_dir}"
-chmod +x "${agent_dir}"/bin/*
+${curl} ${agent_url} > "${agent_bin_dir}"/node-agent
+chmod +x "${agent_bin_dir}"/node-agent
 
-echo exec "${agent_dir}"/bin/wodby_agent "${@}"
+exec "${agent_bin_dir}"/node-agent "${@}"

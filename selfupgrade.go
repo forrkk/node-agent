@@ -20,8 +20,8 @@ const (
 )
 
 func selfUpgrade(ver string) error {
-	var url string = "https://github.com/Wodby/node-agent/releases/download/v"+ver+"/waiter"
-	f, err := os.OpenFile("./node-agent", os.O_WRONLY, 0755)
+	var url string = "https://github.com/Wodby/node-agent/releases/download/v"+ver+"/node-agent"
+	f, err := os.OpenFile("/opt/wodby/bin/node-agent", os.O_WRONLY, 0755)
 	defer f.Close()
 	if err != nil {
 		return err

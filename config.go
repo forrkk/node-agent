@@ -23,7 +23,7 @@ var (
 )
 
 const (
-	defaultConfigDir = "./etc/agent/"
+	defaultConfigDir = "/opt/wodby/etc/"
 	defaultConfigFile = defaultConfigDir + "config.toml"
 )
 
