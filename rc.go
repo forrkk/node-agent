@@ -78,7 +78,7 @@ const (
                     },
                     {
                       "name": "WODBY_KUBE_TOKEN",
-                      "value": "dbdf531b-ceb1-4f9b-a681-cc7b35b6aa34"
+                      "value": "{{.KubeToken}}"
                     }
                   ],
                   "ports": [

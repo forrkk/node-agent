@@ -122,7 +122,7 @@ func downloadKubernetes() error {
 	if err != nil {
 		return err
 	}
-	config.KubeToken = string(NewRnd(32, ""))
+	config.KubeToken = string(NewRnd(64, ""))
 	err = ioutil.WriteFile("/opt/kubernetes/etc/tokens.csv", []byte(config.KubeToken + ",wodby-agent,1000"), 0600)
 	if err != nil {
 		return err
