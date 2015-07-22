@@ -25,7 +25,10 @@ const (
         --portal_net=172.20.0.0/14 \
         --etcd_servers=http://127.0.0.1:4001 \
         --logtostderr=true \
-        --profiling=false
+        --profiling=false \
+        --authorization-mode=ABAC \
+        --authorization-policy-file=/opt/kubernetes/etc/policy.json \
+        --token-auth-file=/opt/kubernetes/etc/tokens.csv
 	end script`
 	kubeControllerUpstartScript = `description "Kubernetes Controller Manager"
 	start on runlevel [2345]
@@ -92,6 +95,7 @@ const (
 
 func downloadKubernetes() error {
 	_ = os.MkdirAll("/opt/kubernetes/bin", 0755)
+	_ = os.MkdirAll("/opt/kubernetes/etc", 0644)
 	files := []string{"kube-apiserver",
 		"kubectl",
 		"kube-controller-manager",
@@ -113,6 +117,15 @@ func downloadKubernetes() error {
 		if err != nil {
 			return err
 		}
+	}
+	err := ioutil.WriteFile("/opt/kubernetes/etc/policy.json", []byte(`{"user":"wodby-agent"}`), 0600)
+	if err != nil {
+		return err
+	}
+	config.KubeToken = string(NewRnd(32, ""))
+	err = ioutil.WriteFile("/opt/kubernetes/etc/tokens.csv", []byte(config.KubeToken + ",wodby-agent,1000"), 0600)
+	if err != nil {
+		return err
 	}
 	return nil
 }

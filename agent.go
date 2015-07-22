@@ -6,6 +6,7 @@ import (
 	"runtime"
 	"os"
 	"time"
+	"fmt"
 )
 
 func init() {
@@ -19,12 +20,16 @@ func main() {
 	case "linux": break
 	default: log.Fatalln("not implemented")
 	}
+	fmt.Print("Fetching system information: ")
 	if _, err := GetOsInfo(); err != nil {
 		log.Fatalln(err)
 	}
+	fmt.Println("OK")
+	fmt.Print("Checking is root: ")
 	if !IsRoot() {
 		log.Fatalln("must be root")
 	}
+	fmt.Println("OK")
 	initConfig()
 	if !config.Initialised {
 		if config.RegToken != "" {
@@ -32,42 +37,55 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
+			fmt.Print("Checking is system compatible: ")
 			switch sys["id"] {
 			case "ubuntu": break
 			default: log.Fatalln("not implemented")
 			}
+			fmt.Println("OK")
+			fmt.Print("Checking network ports: ")
 			if config.ReqPorts == nil {
-				config.ReqPorts = append(config.ReqPorts, 22, 80, 443)
+				config.ReqPorts = append(config.ReqPorts, 2222, 80, 443)
 			}
 			ps := GetPortAvailability(config.ReqPorts)
 			for k, v := range ps {
 				if !v {
-					log.Fatalln("port %s isnot free, but necessary", k)
+					log.Fatalln("port " + k + " isnot free, but necessary")
 				}
 			}
+			fmt.Println("OK")
+			fmt.Print("Checking docker status: ")
 			_, err = GetDockerStatus()
 			if err != nil {
 				if err = installDocker(); err != nil {
 					log.Fatalln(err)
 				}
 			}
+			fmt.Println("OK")
+			fmt.Print("Installing ETCD: ")
 			err = installEtcd()
 			if err != nil {
 				log.Fatalln(err)
 			}
+			fmt.Println("OK")
+			fmt.Print("Installing Google Kubernetes: ")
 			err = installKubernetes()
 			if err != nil {
 				log.Fatalln(err)
 			}
 			time.Sleep(5 * time.Second)
+			fmt.Println("OK")
+			fmt.Print("Installing Wodby Service: ")
 			err = initServices()
 			if err != nil {
 				log.Fatalln(err)
 			}
+			fmt.Println("OK")
 			err = installKubelet()
 			if err != nil {
 				log.Fatalln(err)
 			}
+			fmt.Print("Registering the node on Wodby: ")
 			resp, err := registerNode()
 			if err != nil {
 				log.Fatalln(err)
@@ -78,6 +96,7 @@ func main() {
 			config.AuthKey = resp.Result.AuthKey
 			config.NodeUUID = resp.Result.NodeUUID
 			config.Initialised = true
+			fmt.Println("OK")
 			err = installRC()
 			if err != nil {
 				log.Fatalln(err)
@@ -91,6 +110,7 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
+			fmt.Println("Initialised!")
 			os.Exit(0)
 		} else {
 			log.Fatalln("the node isn't initialised and token wasn't provided")

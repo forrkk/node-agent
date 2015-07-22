@@ -49,7 +49,7 @@ const (
                     },
                     {
                       "containerPort": 22,
-                      "hostPort": 22,
+                      "hostPort": 2222,
                       "protocol":"TCP",
                       "name": "ssh"
                     }
@@ -73,7 +73,7 @@ const (
                       "value": "production"
                     },
                     {
-                      "name": "WODBY_TOKEN",
+                      "name": "WODBY_NODE_ACCESS_KEY",
                       "value": "{{.AuthKey}}"
                     },
                     {

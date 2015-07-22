@@ -15,6 +15,7 @@ type Config struct {
 	ReqPorts []int `toml:"requred_ports"`
 	DNSIP string `toml:"dns_svc_ip"`
 	ETCDIP string `toml:"etcd_svc_ip"`
+	KubeToken string `toml:"kube_token"`
 }
 
 var (

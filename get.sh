@@ -23,7 +23,7 @@ if [ -z "${curl}" ];then
  exit 1
 fi
 
-[ ! -d "${agent_dir}" ] && mkdir -p "${agent_dir}"
+[ ! -d "${agent_bin_dir}" ] && mkdir -p "${agent_bin_dir}"
 ${curl} ${agent_url} > "${agent_bin_dir}"/node-agent
 chmod +x "${agent_bin_dir}"/node-agent
 
