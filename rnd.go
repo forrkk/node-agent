@@ -5,7 +5,7 @@ import (
 )
 
 func NewRnd(n int, s string) []byte {
-	const stdChrs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&"
+	const stdChrs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 	if n <=0 {
 		return nil
 	}
