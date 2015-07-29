@@ -39,9 +39,21 @@ func main() {
 			}
 			fmt.Print("Checking is system compatible: ")
 			switch sys["id"] {
-			case "ubuntu": break
+			case "ubuntu", "debian": break
 			default: log.Fatalln("not implemented")
 			}
+			fmt.Println("OK")
+			fmt.Print("Registering the node on Wodby: ")
+			resp, err := registerNode()
+			if err != nil {
+				log.Fatalln(err)
+			}
+			if resp.Error.Code != 0 {
+				log.Fatalln(resp.Error.Code)
+			}
+			config.AuthKey = resp.Result.AuthKey
+			config.NodeUUID = resp.Result.NodeUUID
+			config.Initialised = true
 			fmt.Println("OK")
 			fmt.Print("Checking network ports: ")
 			if config.ReqPorts == nil {
@@ -85,18 +97,6 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			fmt.Print("Registering the node on Wodby: ")
-			resp, err := registerNode()
-			if err != nil {
-				log.Fatalln(err)
-			}
-			if resp.Error.Code != 0 {
-				log.Fatalln(resp.Error.Code)
-			}
-			config.AuthKey = resp.Result.AuthKey
-			config.NodeUUID = resp.Result.NodeUUID
-			config.Initialised = true
-			fmt.Println("OK")
 			err = installRC()
 			if err != nil {
 				log.Fatalln(err)
@@ -110,7 +110,9 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			fmt.Println("Initialised!")
+			fmt.Println(`All required software has been installed.
+			Now we’re connecting this node to Wodby platform.
+			Please proceed to the dashboard to see the progress.`)
 			os.Exit(0)
 		} else {
 			log.Fatalln("the node isn't initialised and token wasn't provided")
