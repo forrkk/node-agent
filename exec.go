@@ -7,11 +7,11 @@ import (
 func IsCommandExists(c string) ([]byte, error) {
 	err := exec.Command("command").Run()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	p, err := exec.Command("command", "-v", c)
+	p, err := exec.Command("command", "-v", c).Output()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	return []byte(p), nil
 }
