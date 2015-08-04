@@ -39,25 +39,28 @@ func main() {
 			}
 			fmt.Print("Checking is system compatible: ")
 			switch sys["id"] {
-			case "ubuntu", "debian": break
+			case "ubuntu": break
 			default: log.Fatalln("not implemented")
 			}
 			fmt.Println("OK")
-			fmt.Print("Registering the node on Wodby: ")
-			resp, err := registerNode()
-			if err != nil {
-				log.Fatalln(err)
+			fmt.Print("Registering the server on Wodby: ")
+			if config.NodeUUID == "" {
+				resp, err := registerNode()
+				if err != nil {
+					log.Fatalln(err)
+				}
+
+				if resp.Error.Code != 0 {
+					log.Fatalln(resp.Error.Message)
+				}
+				config.AuthKey = resp.Result.AuthKey
+				config.NodeUUID = resp.Result.NodeUUID
+				updateConfig()
+				fmt.Println("OK")
 			}
-			if resp.Error.Code != 0 {
-				log.Fatalln(resp.Error.Code)
-			}
-			config.AuthKey = resp.Result.AuthKey
-			config.NodeUUID = resp.Result.NodeUUID
-			config.Initialised = true
-			fmt.Println("OK")
 			fmt.Print("Checking network ports: ")
 			if config.ReqPorts == nil {
-				config.ReqPorts = append(config.ReqPorts, 2222, 80, 443)
+				config.ReqPorts = append(config.ReqPorts, 2222, 80, 443, 4001, 8080, 6443, 10248)
 			}
 			ps := GetPortAvailability(config.ReqPorts)
 			for k, v := range ps {
@@ -101,7 +104,10 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			updateConfig()
+			err = addSSHKey()
+			if err != nil {
+				log.Fatalln(err)
+			}
 			err = SelfInstall()
 			if err != nil {
 				log.Fatalln(err)
@@ -110,12 +116,15 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			fmt.Println(`All required software has been installed.
-			Now we’re connecting this node to Wodby platform.
+			config.Initialised = true
+			updateConfig()
+			fmt.Println(
+			`All required software has been installed.
+			Now we are connecting this server to Wodby platform.
 			Please proceed to the dashboard to see the progress.`)
 			os.Exit(0)
 		} else {
-			log.Fatalln("the node isn't initialised and token wasn't provided")
+			log.Fatalln("the server isn't initialised and token wasn't provided")
 		}
 	}
 go checkVersion()

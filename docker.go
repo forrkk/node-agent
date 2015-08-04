@@ -59,6 +59,9 @@ func installDocker() error {
 		return err
 	}
 	if _, err := exec.Command("apt-get", "update").Output(); err != nil { return err }
+	if _, err := IsCommandExists("curl"); err != nil {
+		if _, err := exec.Command("apt-get", "install", "-y", "-q", "curl").Output(); err != nil { return err }
+	}
 	if _, err := exec.Command("apt-get", "install", "-y", "-q", "lxc-docker").Output(); err != nil { return err }
 	f, err := os.OpenFile("/etc/default/docker", os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
