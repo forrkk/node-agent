@@ -119,9 +119,9 @@ func main() {
 			config.Initialised = true
 			updateConfig()
 			fmt.Println(
-			`All required software has been installed.
-			Now we are connecting this server to Wodby platform.
-			Please proceed to the dashboard to see the progress.`)
+`All required software has been installed.
+Now we are connecting this server to Wodby platform.
+Please proceed to the dashboard to see the progress.`)
 			os.Exit(0)
 		} else {
 			log.Fatalln("the server isn't initialised and token wasn't provided")
