@@ -85,7 +85,11 @@ func UninstallDocker() error {
 	if err != nil {
 		return err
 	}
-	_, err = exec.Command("apt-get", "remove", "-y", "-q", "lxc-docker").Output()
+	_, err = exec.Command("apt-get", "purge", "-y", "-q", "lxc-docker").Output()
+	if err != nil {
+		return err
+	}
+	_, err = exec.Command("apt-get", "autoremove", "-y", "-q").Output()
 	if err != nil {
 		return err
 	}
