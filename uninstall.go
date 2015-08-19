@@ -7,6 +7,14 @@ func Uninstall() error {
     if err != nil {
         return err
     }
+    err = UninstallETCD()
+    if err != nil {
+        return err
+    }
+    err = os.RemoveAll("/opt/etcd")
+    if err != nil {
+        return err
+    }
     err = UninstallKubernetes()
     if err != nil {
         return err
