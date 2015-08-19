@@ -95,5 +95,9 @@ func UninstallDocker() error {
 	if err != nil {
 		return err
 	}
+    err = os.RemoveAll("/etc/default/docker")
+	if err != nil {
+		return err
+	}
     return nil
 }
