@@ -53,3 +53,23 @@ func SelfStart() error {
 	}
 	return nil
 }
+
+func SelfStop() error {
+	_, err := exec.Command("service", "wodby-agent", "stop").Output()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func SelfUninstall() error {
+    err := SelfStop()
+	if err != nil {
+		return err
+	}
+	err = os.RemoveAll("/etc/init/wodby-agent.conf")
+	if err != nil {
+		return err
+	}
+	return nil
+}

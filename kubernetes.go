@@ -186,3 +186,52 @@ func installKubelet() error {
 	}
 	return nil
 }
+
+func UninstallKubernetes() error {
+	var err error
+	_, err = exec.Command("service", "kube-kubelet", "stop").Output()
+	if err != nil {
+		return err
+	}
+	_, err = exec.Command("service", "kube-proxy", "stop").Output()
+	if err != nil {
+		return err
+	}
+	_, err = exec.Command("service", "kube-scheduler", "stop").Output()
+	if err != nil {
+		return err
+	}
+	_, err = exec.Command("service", "kube-controller", "stop").Output()
+	if err != nil {
+		return err
+	}
+	_, err = exec.Command("service", "kube-apiserver", "stop").Output()
+	if err != nil {
+		return err
+	}
+    err = os.RemoveAll("/etc/init/kube-kubelet.conf")
+	if err != nil {
+		return err
+	}
+    err = os.RemoveAll("/etc/init/kube-proxy.conf")
+	if err != nil {
+		return err
+	}
+    err = os.RemoveAll("/etc/init/kube-scheduler.conf")
+	if err != nil {
+		return err
+	}
+    err = os.RemoveAll("/etc/init/kube-controller.conf")
+	if err != nil {
+		return err
+	}
+    err = os.RemoveAll("/etc/init/kube-apiserver.conf")
+	if err != nil {
+		return err
+	}
+    err = os.RemoveAll("/opt/kubernetes")
+	if err != nil {
+		return err
+	}
+    return nil
+}

@@ -78,3 +78,16 @@ func installDocker() error {
 	}
 	return nil
 }
+
+func UninstallDocker() error {
+	var err error
+	_, err = exec.Command("service", "docker", "stop").Output()
+	if err != nil {
+		return err
+	}
+	_, err = exec.Command("apt-get", "remove", "-y", "-q", "lxc-docker").Output()
+	if err != nil {
+		return err
+	}
+    return nil
+}

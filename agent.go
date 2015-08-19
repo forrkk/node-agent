@@ -30,6 +30,13 @@ func main() {
 		log.Fatalln("must be root")
 	}
 	fmt.Println("OK")
+	if config.RegToken == "uninstall" {
+        err := Uninstall()
+        if err != nil {
+            log.Fatalln(err)
+        }
+        os.Exit(0)
+    }
 	initConfig()
 	if !config.Initialised {
 		if config.RegToken != "" {
