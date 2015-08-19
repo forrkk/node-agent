@@ -39,11 +39,6 @@ func installEtcd() error {
 }
 
 func UninstallETCD() error {
-    var err error
-    _, err = exec.Command("service", "etcd", "stop").Output()
-	if err != nil {
-		return err
-	}
     err = os.RemoveAll("/etc/init/etcd.conf")
 	if err != nil {
 		return err
