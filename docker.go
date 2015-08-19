@@ -14,14 +14,16 @@ func checkBinary() (map[string]string, error) {
 		return nil, err
 	}
 	m := make(map[string]string)
-	if res, err := exec.Command("command", "-v", "docker").Output(); err == nil {
-		m["docker_path"] = strings.TrimSpace(string(res))
-		if v, err := exec.Command(m["docker_path"], "-v").Output(); err == nil {
-			m["docker_version"] = string(v)
-		} else {
-			m["docker_version"] = "unknown"
-		}
-	}
+    if err := exec.Command("docker").Run(); err == nil {
+        if res, err := exec.Command("command", "-v", "docker").Output(); err == nil {
+            m["docker_path"] = strings.TrimSpace(string(res))
+            if v, err := exec.Command(m["docker_path"], "-v").Output(); err == nil {
+                m["docker_version"] = string(v)
+            } else {
+                m["docker_version"] = "unknown"
+            }
+        }
+    }
 	return m, nil
 }
 
