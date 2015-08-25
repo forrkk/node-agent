@@ -34,6 +34,12 @@ const (
                   "image": "sfo.registry.wodby.com/wodby/edge:0.1",
                   "imagePullPolicy": "Always",
                   "privileged": true,
+                  "env": [
+                    {
+                      "name": "WODBY_NODE_UUID",
+                      "value": "{{.NodeUUID}}"
+                    }
+                  ],
                   "ports": [
                     {
                       "containerPort": 80,
