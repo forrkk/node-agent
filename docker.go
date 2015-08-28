@@ -69,7 +69,7 @@ func installDocker() error {
 	if err != nil {
 		return nil
 	}
-	_, err = f.WriteString(`DOCKER_OPTS="--insecure-registry sfo.registry.wodby.com"`)
+	_, err = f.WriteString(`DOCKER_OPTS="--insecure-registry sfo.registry.wodby.com"`+"\n")
 	if err != nil {
 		return err
 	}
@@ -95,9 +95,9 @@ func UninstallDocker() error {
 	if err != nil {
 		return err
 	}
-    err = os.RemoveAll("/etc/default/docker")
-	if err != nil {
-		return err
-	}
+//    err = os.RemoveAll("/etc/default/docker")
+//	if err != nil {
+//		return err
+//	}
     return nil
 }
