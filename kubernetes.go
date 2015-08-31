@@ -58,6 +58,7 @@ const (
 	kubeProxyUpstartScript = `description "Kubernetes Proxy Service"
 	start on runlevel [2345]
 	stop on runlevel [!2345]
+	limit nofile 65536 65536
 	respawn
 	kill timeout 5
 	script
