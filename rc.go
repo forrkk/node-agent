@@ -34,6 +34,12 @@ const (
                   "image": "sfo.registry.wodby.com/wodby/edge:0.1",
                   "imagePullPolicy": "Always",
                   "privileged": true,
+				  "volumeMounts": [
+					{
+					  "name": "backups",
+					  "mountPath": "/usr/share/nginx/html/backups"
+					}
+				  ],
                   "env": [
                     {
                       "name": "WODBY_NODE_UUID",
@@ -130,7 +136,13 @@ const (
                   "hostPath": {
                     "path": "/srv/wodby/services/redis"
                   }
-                }
+                },
+				{
+				  "name": "backups",
+				  "hostPath": {
+					"path": "/srv/wodby/backups"
+				  }
+				}
               ]
             }
           }
