@@ -21,7 +21,7 @@ func isUFWinstalled() bool {
 
 func isUFWActive() bool {
     out, err := exec.Command("ufw", "status").Output()
-    if err != nil || strings.Contains(strings.ToLower(out), "inactive") {
+    if err != nil || strings.Contains(strings.ToLower(string(out)), "inactive") {
         return false
     }
     return true
