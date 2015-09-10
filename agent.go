@@ -50,6 +50,15 @@ func main() {
 			default: log.Fatalln("not implemented")
 			}
 			fmt.Println("OK")
+			fmt.Print("Checking firewalls' status: ")
+			if isUFW() {
+				fmt.Println("DETECTED")
+				log.Fatalln(`We have detected UFW installed and active on this server.
+Please disable it by command below:
+	ufw disable
+and try installation again.`)
+			}
+			fmt.Println("OK")
 			fmt.Print("Registering the server on Wodby: ")
 			if config.NodeUUID == "" {
 				resp, err := registerNode()
@@ -85,6 +94,7 @@ func main() {
 			}
 			fmt.Println("OK")
 			fmt.Print("Installing ETCD: ")
+			time.Sleep(5 * time.Second)
 			err = installEtcd()
 			if err != nil {
 				log.Fatalln(err)
