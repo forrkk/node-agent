@@ -82,7 +82,11 @@ const (
                     },
                     {
                       "name": "WODBY_ENVIRONMENT_TYPE",
-                      "value": "production"
+                      "value": "{{.EnvType}}"
+                    },
+                    {
+                      "name": "WODBY_ENVIRONMENT_NAME",
+                      "value": "{{.EnvName}}"
                     },
                     {
                       "name": "WODBY_NODE_ACCESS_KEY",

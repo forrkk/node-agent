@@ -1,10 +1,11 @@
 package main
+
 import (
-	"os"
-	"os/exec"
-	"net/http"
 	"io"
 	"io/ioutil"
+	"net/http"
+	"os"
+	"os/exec"
 	"text/template"
 )
 
@@ -109,7 +110,7 @@ func downloadKubernetes() error {
 		if err != nil {
 			return err
 		}
-		resp, err := http.Get("http://sfo.registry.wodby.com:81/releases/kubernetes/v0.16.0/bin/linux/amd64/"+files[i])
+		resp, err := http.Get("http://sfo.registry.wodby.com:81/releases/kubernetes/v0.16.0/bin/linux/amd64/" + files[i])
 		defer resp.Body.Close()
 		if err != nil {
 			return err
@@ -124,7 +125,7 @@ func downloadKubernetes() error {
 		return err
 	}
 	config.KubeToken = string(NewRnd(64, ""))
-	err = ioutil.WriteFile("/opt/kubernetes/etc/tokens.csv", []byte(config.KubeToken + ",wodby-agent,1000"), 0600)
+	err = ioutil.WriteFile("/opt/kubernetes/etc/tokens.csv", []byte(config.KubeToken+",wodby-agent,1000"), 0600)
 	if err != nil {
 		return err
 	}
@@ -210,29 +211,29 @@ func UninstallKubernetes() error {
 	if err != nil {
 		return err
 	}
-    err = os.RemoveAll("/etc/init/kube-kubelet.conf")
+	err = os.RemoveAll("/etc/init/kube-kubelet.conf")
 	if err != nil {
 		return err
 	}
-    err = os.RemoveAll("/etc/init/kube-proxy.conf")
+	err = os.RemoveAll("/etc/init/kube-proxy.conf")
 	if err != nil {
 		return err
 	}
-    err = os.RemoveAll("/etc/init/kube-scheduler.conf")
+	err = os.RemoveAll("/etc/init/kube-scheduler.conf")
 	if err != nil {
 		return err
 	}
-    err = os.RemoveAll("/etc/init/kube-controller.conf")
+	err = os.RemoveAll("/etc/init/kube-controller.conf")
 	if err != nil {
 		return err
 	}
-    err = os.RemoveAll("/etc/init/kube-apiserver.conf")
+	err = os.RemoveAll("/etc/init/kube-apiserver.conf")
 	if err != nil {
 		return err
 	}
-    err = os.RemoveAll("/opt/kubernetes")
+	err = os.RemoveAll("/opt/kubernetes")
 	if err != nil {
 		return err
 	}
-    return nil
+	return nil
 }

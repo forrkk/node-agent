@@ -2,23 +2,35 @@
 package main
 
 import (
-	"log"
-	"runtime"
-	"os"
-	"time"
 	"fmt"
+	"log"
+	"os"
+	"runtime"
+	"time"
 )
 
 func init() {
-	if len(os.Args) == 2 {
+	switch len(os.Args) {
+	case 2:
 		config.RegToken = string(os.Args[1])
+		config.EnvName = "prod"
+		config.EnvType = "production"
+	case 3:
+		config.RegToken = string(os.Args[1])
+		config.EnvName = string(os.Args[2])
+	case 4:
+		config.RegToken = string(os.Args[1])
+		config.EnvName = string(os.Args[2])
+		config.EnvType = string(os.Args[3])
 	}
 }
 
 func main() {
 	switch runtime.GOOS {
-	case "linux": break
-	default: log.Fatalln("not implemented")
+	case "linux":
+		break
+	default:
+		log.Fatalln("not implemented")
 	}
 	fmt.Print("Fetching system information: ")
 	if _, err := GetOsInfo(); err != nil {
@@ -31,12 +43,12 @@ func main() {
 	}
 	fmt.Println("OK")
 	if config.RegToken == "uninstall" {
-        err := Uninstall()
-        if err != nil {
-            log.Fatalln(err)
-        }
-        os.Exit(0)
-    }
+		err := Uninstall()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		os.Exit(0)
+	}
 	initConfig()
 	if !config.Initialised {
 		if config.RegToken != "" {
@@ -46,8 +58,10 @@ func main() {
 			}
 			fmt.Print("Checking is system compatible: ")
 			switch sys["id"] {
-			case "ubuntu": break
-			default: log.Fatalln("not implemented")
+			case "ubuntu":
+				break
+			default:
+				log.Fatalln("not implemented")
 			}
 			fmt.Println("OK")
 			fmt.Print("Checking firewalls' status: ")
@@ -144,6 +158,6 @@ Please proceed to the dashboard to see the progress.`)
 			log.Fatalln("the server isn't initialised and token wasn't provided")
 		}
 	}
-go checkVersion()
-select{}
+	go checkVersion()
+	select {}
 }
