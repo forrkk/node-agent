@@ -22,6 +22,11 @@ func init() {
 		config.RegToken = string(os.Args[1])
 		config.EnvName = string(os.Args[2])
 		config.EnvType = string(os.Args[3])
+	case 5:
+		config.RegToken = string(os.Args[1])
+		config.EnvName = string(os.Args[2])
+		config.EnvType = string(os.Args[3])
+		config.AuthKey = string(os.Args[4])
 	}
 }
 

@@ -14,6 +14,7 @@ const (
 	kill timeout 10
 	pre-start script
 		docker pull quay.io/coreos/etcd
+		docker rm -f etcd || true
 	end script
 	script
 		exec docker run --rm -v /etc/ssl/certs/:/etc/ssl/certs \
