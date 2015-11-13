@@ -126,6 +126,24 @@ const (
                   "name": "kube2sky",
                   "image": "sfo.registry.wodby.com/wodby/kube2sky:0.1",
                   "imagePullPolicy": "Always"
+                },
+                {
+                  "name": "mta",
+                  "image": "wodby/mta-alpine",
+                  "imagePullPolicy": "Always",
+                  "volumeMounts": [
+                    {
+                      "name": "mta",
+                      "mountPath": "/var/spool/smtpd"
+                    }
+                  ],
+                  "ports": [
+                    {
+                      "name": "smtp",
+                      "containerPort": 25,
+                      "protocol": "TCP"
+                    }
+                  ]
                 }
               ],
               "volumes": [
@@ -139,6 +157,12 @@ const (
                   "name": "redis",
                   "hostPath": {
                     "path": "/srv/wodby/services/redis"
+                  }
+                },
+                {
+                  "name": "mta",
+                  "hostPath": {
+                    "path": "/srv/wodby/services/mta"
                   }
                 },
 				{

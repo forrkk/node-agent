@@ -86,6 +86,12 @@ const (
               "protocol": "TCP",
               "port": 53,
               "targetPort": "dns-tcp"
+            },
+            {
+              "name": "smtp",
+              "port": 25,
+              "protocol": "TCP",
+              "targetPort": "smtp"
             }
           ]
         }
