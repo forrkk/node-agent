@@ -98,28 +98,28 @@ const (
 func downloadKubernetes() error {
 	_ = os.MkdirAll("/opt/kubernetes/bin", 0755)
 	_ = os.MkdirAll("/opt/kubernetes/etc", 0644)
-//	files := []string{"kube-apiserver",
-//		"kubectl",
-//		"kube-controller-manager",
-//		"kube-scheduler",
-//		"kube-proxy",
-//		"kubelet"}
-//	for i := range files {
-//		file, err := os.OpenFile("/opt/kubernetes/bin/"+files[i], os.O_CREATE|os.O_RDWR, 0755)
-//		defer file.Close()
-//		if err != nil {
-//			return err
-//		}
-//		resp, err := http.Get("http://sfo.registry.wodby.com:81/releases/kubernetes/v0.16.0/bin/linux/amd64/" + files[i])
-//		defer resp.Body.Close()
-//		if err != nil {
-//			return err
-//		}
-//		_, err = io.Copy(file, resp.Body)
-//		if err != nil {
-//			return err
-//		}
-//	}
+	files := []string{"kube-apiserver",
+		"kubectl",
+		"kube-controller-manager",
+		"kube-scheduler",
+		"kube-proxy",
+		"kubelet"}
+	for i := range files {
+		file, err := os.OpenFile("/opt/kubernetes/bin/"+files[i], os.O_CREATE|os.O_RDWR, 0755)
+		defer file.Close()
+		if err != nil {
+			return err
+		}
+		resp, err := http.Get("http://sfo.registry.wodby.com:81/releases/kubernetes/v0.16.0/bin/linux/amd64/" + files[i])
+		defer resp.Body.Close()
+		if err != nil {
+			return err
+		}
+		_, err = io.Copy(file, resp.Body)
+		if err != nil {
+			return err
+		}
+	}
 	err := ioutil.WriteFile("/opt/kubernetes/etc/policy.json", []byte(`{"user":"wodby-agent"}`), 0600)
 	if err != nil {
 		return err
