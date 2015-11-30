@@ -6,7 +6,6 @@ import (
 	"os/exec"
 	"strings"
 	"os"
-	"net/http"
 )
 
 func checkBinary() (map[string]string, error) {
@@ -53,12 +52,11 @@ func GetDockerStatus() (map[string]string, error) {
 }
 
 func installDocker() error {
-	resp, err := http.Get("https://get.docker.com/")
+	resp, err := SendReq("GET", "https://get.docker.com/", nil, nil)
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
-	if _,err := exec.Command("/bin/sh", string(resp.Body)).Output(); err != nil { return err }
+	if _,err := exec.Command("/bin/sh", string(resp)).Output(); err != nil { return err }
 //	if _, err := exec.Command("apt-key", "adv", "--keyserver", "hkp://p80.pool.sks-keyservers.net:80", "--recv-keys", "36A1D7869245C8950F966E92D8576A8BA88D21E9").Output(); err != nil {
 //		return err
 //	}
