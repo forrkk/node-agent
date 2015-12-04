@@ -1,15 +1,16 @@
 package main
+
 import (
-	"net/http"
-	"io"
 	"bytes"
+	"io"
 	"io/ioutil"
+	"net/http"
 )
 
 func SendReq(method, url string, data []byte, headers map[string]string) ([]byte, error) {
 	var body io.Reader = bytes.NewReader(data)
 	req, err := http.NewRequest(method, url, body)
-	if err !=nil {
+	if err != nil {
 		return nil, err
 	}
 	if headers != nil {

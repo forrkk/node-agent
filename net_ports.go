@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-func GetPortAvailability(ports []int) (map[string]bool) {
+func GetPortAvailability(ports []int) map[string]bool {
 	res := make(map[string]bool)
 	for _, p := range ports {
 		if p <= 65535 && p > 0 {

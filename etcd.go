@@ -2,8 +2,8 @@ package main
 
 import (
 	"io/ioutil"
+	"os"
 	"os/exec"
-    "os"
 )
 
 const (
@@ -41,7 +41,7 @@ func installEtcd() error {
 }
 
 func UninstallETCD() error {
-    err := os.RemoveAll("/etc/init/etcd.conf")
+	err := os.RemoveAll("/etc/init/etcd.conf")
 	if err != nil {
 		return err
 	}

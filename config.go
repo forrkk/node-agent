@@ -16,8 +16,8 @@ type Config struct {
 	DNSIP       string `toml:"dns_svc_ip"`
 	ETCDIP      string `toml:"etcd_svc_ip"`
 	KubeToken   string `toml:"kube_token"`
-	EnvName		string `toml:"env_name"`
-	EnvType		string `toml:"env_type"`
+	EnvName     string `toml:"env_name"`
+	EnvType     string `toml:"env_type"`
 }
 
 var (

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"text/template"
@@ -125,11 +126,6 @@ const (
                   ]
                 },
                 {
-                  "name": "kube2sky",
-                  "image": "wodby/kube2sky:0.1",
-                  "imagePullPolicy": "Always"
-                },
-                {
                   "name": "mta",
                   "image": "wodby/mta-alpine",
                   "imagePullPolicy": "Always",
@@ -178,6 +174,41 @@ const (
           }
         }
       }`
+	wodbyK2Src = `{
+	"apiVersion": "v1",
+	"kind": "ReplicationController",
+	"metadata": {
+		"labels": {
+			"name": "kube2sky"
+		},
+		"name": "kube2sky"
+	},
+	"spec": {
+		"replicas": 1,
+		"selector": {
+			"name": "kube2sky"
+		},
+		"template": {
+			"metadata": {
+				"labels": {
+					"name": "kube2sky"
+				}
+			},
+			"spec": {
+				"hostNetwork": true,
+				"containers": [{
+					"name": "kube2sky",
+					"image": "wodby/kube2sky",
+					"imagePullPolicy": "Always",
+					"command": [
+						"-domain=wodby.local",
+						"-v=2"
+					]
+				}]
+			}
+		}
+	}
+}`
 )
 
 func installRC() error {
@@ -190,7 +221,15 @@ func installRC() error {
 		return err
 	}
 	f.Close()
+	err = ioutil.WriteFile("/opt/wodby/etc/kube2sky_rc.json", []byte(wodbyK2Src), 0644)
+	if err != nil {
+		return err
+	}
 	_, err = exec.Command("/opt/kubernetes/bin/kubectl", "--namespace=wodby", "create", "-f", "/opt/wodby/etc/wodby_rc.json").Output()
+	if err != nil {
+		return err
+	}
+	_, err = exec.Command("/opt/kubernetes/bin/kubectl", "--namespace=wodby", "create", "-f", "/opt/wodby/etc/kube2sky_rc.json").Output()
 	if err != nil {
 		return err
 	}

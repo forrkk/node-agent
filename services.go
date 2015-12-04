@@ -1,9 +1,10 @@
 package main
+
 import (
-	"os"
 	"io/ioutil"
+	"os"
 	"os/exec"
-    "strings"
+	"strings"
 )
 
 const (
@@ -33,7 +34,7 @@ const (
           ]
         }
       }`
-    wodbyETCDenp = `{
+	wodbyETCDenp = `{
         "kind": "Endpoints",
         "apiVersion": "v1",
         "metadata": {
@@ -95,13 +96,13 @@ const (
           ]
         }
       }`
-    wodbyGetDNSSvcIP = `#!/bin/sh
+	wodbyGetDNSSvcIP = `#!/bin/sh
       while [ -z ${dnsSvcIp} ];do
         sleep 1
         dnsSvcIp=$(/opt/kubernetes/bin/kubectl --namespace=wodby get svc wodby-svc | grep wodby-svc | awk '{print $2}')
       done
       echo "${dnsSvcIp}" > /opt/wodby/etc/dns_svc_ip`
-    wodbyGetETCDSvcIP = `#!/bin/sh
+	wodbyGetETCDSvcIP = `#!/bin/sh
       while [ -z ${etcSvcIp} ];do
         sleep 1
         etcSvcIp=$(/opt/kubernetes/bin/kubectl --namespace=wodby get svc etcd | grep etcd | awk '{print $2}')
@@ -143,7 +144,7 @@ func initServices() error {
 	if err != nil {
 		return err
 	}
-    err = ioutil.WriteFile("/opt/kubernetes/bin/getetcdsvcip", []byte(wodbyGetETCDSvcIP), 0755)
+	err = ioutil.WriteFile("/opt/kubernetes/bin/getetcdsvcip", []byte(wodbyGetETCDSvcIP), 0755)
 	if err != nil {
 		return err
 	}
@@ -151,20 +152,20 @@ func initServices() error {
 	if err != nil {
 		return err
 	}
-    buf, err := ioutil.ReadFile("/opt/wodby/etc/etcd_svc_ip")
-    if err != nil {
-		return err
-	}
-    config.ETCDIP = strings.TrimSpace(string(buf))
-    _, err = exec.Command("curl", "http://127.0.0.1:4001/v2/keys/skydns/local/wodby/wodby/etcd", "-XPUT", "-d", `value={"host":"`+config.ETCDIP+`","priority":10,"weight":10,"ttl":300}`).Output()
+	buf, err := ioutil.ReadFile("/opt/wodby/etc/etcd_svc_ip")
 	if err != nil {
 		return err
 	}
-    _, err = exec.Command("curl", "http://127.0.0.1:4001/v2/keys/wodby/services/edge/worker_processes", "-XPUT", "-d", `value=1`).Output()
+	config.ETCDIP = strings.TrimSpace(string(buf))
+	_, err = exec.Command("curl", "http://127.0.0.1:4001/v2/keys/skydns/local/wodby/wodby/etcd", "-XPUT", "-d", `value={"host":"`+config.ETCDIP+`","priority":10,"weight":10,"ttl":300}`).Output()
 	if err != nil {
 		return err
 	}
-    err = ioutil.WriteFile("/opt/kubernetes/bin/getdnssvcip", []byte(wodbyGetDNSSvcIP), 0755)
+	_, err = exec.Command("curl", "http://127.0.0.1:4001/v2/keys/wodby/services/edge/worker_processes", "-XPUT", "-d", `value=1`).Output()
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile("/opt/kubernetes/bin/getdnssvcip", []byte(wodbyGetDNSSvcIP), 0755)
 	if err != nil {
 		return err
 	}
@@ -172,10 +173,10 @@ func initServices() error {
 	if err != nil {
 		return err
 	}
-    buf, err = ioutil.ReadFile("/opt/wodby/etc/dns_svc_ip")
-    if err != nil {
+	buf, err = ioutil.ReadFile("/opt/wodby/etc/dns_svc_ip")
+	if err != nil {
 		return err
 	}
-    config.DNSIP = string(buf)
+	config.DNSIP = string(buf)
 	return nil
 }

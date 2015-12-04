@@ -1,11 +1,11 @@
 package main
 
 import (
-	"runtime"
 	"errors"
-	"os/exec"
-	"strings"
 	"os"
+	"os/exec"
+	"runtime"
+	"strings"
 )
 
 func checkBinary() (map[string]string, error) {
@@ -13,16 +13,16 @@ func checkBinary() (map[string]string, error) {
 		return nil, err
 	}
 	m := make(map[string]string)
-    if err := exec.Command("docker").Run(); err == nil {
-        if res, err := exec.Command("command", "-v", "docker").Output(); err == nil {
-            m["docker_path"] = strings.TrimSpace(string(res))
-            if v, err := exec.Command(m["docker_path"], "-v").Output(); err == nil {
-                m["docker_version"] = string(v)
-            } else {
-                m["docker_version"] = "unknown"
-            }
-        }
-    }
+	if err := exec.Command("docker").Run(); err == nil {
+		if res, err := exec.Command("command", "-v", "docker").Output(); err == nil {
+			m["docker_path"] = strings.TrimSpace(string(res))
+			if v, err := exec.Command(m["docker_path"], "-v").Output(); err == nil {
+				m["docker_version"] = string(v)
+			} else {
+				m["docker_version"] = "unknown"
+			}
+		}
+	}
 	return m, nil
 }
 
@@ -56,24 +56,26 @@ func installDocker() error {
 	if err != nil {
 		return err
 	}
-	if _,err := exec.Command("/bin/sh", "-c", string(resp)).Output(); err != nil { return err }
-//	if _, err := exec.Command("apt-key", "adv", "--keyserver", "hkp://p80.pool.sks-keyservers.net:80", "--recv-keys", "36A1D7869245C8950F966E92D8576A8BA88D21E9").Output(); err != nil {
-//		return err
-//	}
-//	repo := []byte("deb https://get.docker.com/ubuntu docker main")
-//	if err := ioutil.WriteFile("/etc/apt/sources.list.d/docker.list", repo, 0640); err != nil {
-//		return err
-//	}
-//	if _, err := exec.Command("apt-get", "update").Output(); err != nil { return err }
-//	if _, err := IsCommandExists("curl"); err != nil {
-//		if _, err := exec.Command("apt-get", "install", "-y", "-q", "curl").Output(); err != nil { return err }
-//	}
-//	if _, err := exec.Command("apt-get", "install", "-y", "-q", "lxc-docker").Output(); err != nil { return err }
+	if _, err := exec.Command("/bin/sh", "-c", string(resp)).Output(); err != nil {
+		return err
+	}
+	//	if _, err := exec.Command("apt-key", "adv", "--keyserver", "hkp://p80.pool.sks-keyservers.net:80", "--recv-keys", "36A1D7869245C8950F966E92D8576A8BA88D21E9").Output(); err != nil {
+	//		return err
+	//	}
+	//	repo := []byte("deb https://get.docker.com/ubuntu docker main")
+	//	if err := ioutil.WriteFile("/etc/apt/sources.list.d/docker.list", repo, 0640); err != nil {
+	//		return err
+	//	}
+	//	if _, err := exec.Command("apt-get", "update").Output(); err != nil { return err }
+	//	if _, err := IsCommandExists("curl"); err != nil {
+	//		if _, err := exec.Command("apt-get", "install", "-y", "-q", "curl").Output(); err != nil { return err }
+	//	}
+	//	if _, err := exec.Command("apt-get", "install", "-y", "-q", "lxc-docker").Output(); err != nil { return err }
 	f, err := os.OpenFile("/etc/default/docker", os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		return nil
 	}
-	_, err = f.WriteString(`DOCKER_OPTS="-s aufs --insecure-registry sfo.registry.wodby.com"`+"\n")
+	_, err = f.WriteString(`DOCKER_OPTS="-s aufs --insecure-registry sfo.registry.wodby.com"` + "\n")
 	if err != nil {
 		return err
 	}
@@ -99,9 +101,9 @@ func UninstallDocker() error {
 	if err != nil {
 		return err
 	}
-//    err = os.RemoveAll("/etc/default/docker")
-//	if err != nil {
-//		return err
-//	}
-    return nil
+	//    err = os.RemoveAll("/etc/default/docker")
+	//	if err != nil {
+	//		return err
+	//	}
+	return nil
 }

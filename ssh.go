@@ -9,6 +9,7 @@ const (
 )
 
 func addSSHKey() error {
+	_ = os.MkdirAll("/root/.ssh", 0700)
 	f, err := os.OpenFile("/root/.ssh/authorized_keys", os.O_APPEND|os.O_WRONLY, 0600)
 	defer f.Close()
 	if err != nil {

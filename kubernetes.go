@@ -87,6 +87,7 @@ const (
         --node-status-update-frequency=60s \
         --sync-frequency=15s \
         --cluster-domain=wodby.local \
+        --serialize-image-pulls=false \
         --cluster-dns={{.DNSIP}}
 	end script`
 )

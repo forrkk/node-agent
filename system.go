@@ -1,21 +1,21 @@
 package main
 
 import (
-	"runtime"
 	"bufio"
+	"errors"
 	"io/ioutil"
 	"os"
+	"runtime"
 	"strings"
-	"errors"
 )
 
-func getLinuxInfo () (map[string]string, error) {
+func getLinuxInfo() (map[string]string, error) {
 	m := make(map[string]string)
 	if f, err := os.Open("/etc/os-release"); err == nil {
 		defer f.Close()
 		s := bufio.NewScanner(f)
 		for s.Scan() {
-			a := strings.Split(s.Text(),"=")
+			a := strings.Split(s.Text(), "=")
 			m[strings.ToLower(a[0])] = a[1]
 		}
 		if err := s.Err(); err != nil {
@@ -30,7 +30,7 @@ func getLinuxInfo () (map[string]string, error) {
 	return m, nil
 }
 
-func getInitInfo () (map[string]string, error) {
+func getInitInfo() (map[string]string, error) {
 	m := make(map[string]string)
 	if v, err := ioutil.ReadFile("/proc/1/comm"); err == nil {
 		if strings.Contains(string(v), "systemd") {

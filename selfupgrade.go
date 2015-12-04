@@ -1,10 +1,10 @@
 package main
 
 import (
-	"os"
-	"net/http"
 	"io"
 	"io/ioutil"
+	"net/http"
+	"os"
 	"os/exec"
 )
 
@@ -20,7 +20,7 @@ const (
 )
 
 func selfUpgrade(ver string) error {
-	var url string = "https://github.com/Wodby/node-agent/releases/download/v"+ver+"/node-agent"
+	var url string = "https://github.com/Wodby/node-agent/releases/download/v" + ver + "/node-agent"
 	f, err := os.OpenFile("/opt/wodby/bin/node-agent", os.O_WRONLY, 0755)
 	defer f.Close()
 	if err != nil {
@@ -63,7 +63,7 @@ func SelfStop() error {
 }
 
 func SelfUninstall() error {
-    err := SelfStop()
+	err := SelfStop()
 	if err != nil {
 		return err
 	}
