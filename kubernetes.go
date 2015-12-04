@@ -17,7 +17,6 @@ const (
 	kill timeout 5
 	script
 		exec /opt/kubernetes/bin/hyperkube apiserver \
-		--bind-address=127.0.0.1 \
         --insecure_bind_address=127.0.0.1 \
         --allow_privileged=true \
         --insecure_port=8080 \
