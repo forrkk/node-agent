@@ -62,6 +62,7 @@ const (
 	script
 		exec /opt/kubernetes/bin/hyperkube proxy \
 		--master=127.0.0.1:8080 \
+		--proxy-mode=iptables \
 		--logtostderr=true
 	end script`
 	kubeKubeletUpstartScript = `description "Kubernetes Kubelet"
