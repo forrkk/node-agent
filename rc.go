@@ -200,7 +200,7 @@ const (
 					"name": "kube2sky",
 					"image": "wodby/kube2sky",
 					"imagePullPolicy": "Always",
-					"command": [
+					"args": [
 						"-domain=wodby.local",
 						"-v=2"
 					]
