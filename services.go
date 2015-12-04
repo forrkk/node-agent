@@ -42,7 +42,7 @@ const (
         "subsets": [
           {
             "addresses": [
-              { "IP": "172.17.0.1" }
+              { "ip": "172.17.0.1" }
             ],
             "ports": [
               {
