@@ -156,7 +156,7 @@ and try installation again.`)
 			updateConfig()
 			fmt.Println(
 `All required software has been installed.
-Now we are connecting this server to Wodby platform.
+We are now connecting this server to Wodby platform.
 Please proceed to the dashboard to see the progress.`)
 			os.Exit(0)
 		} else {

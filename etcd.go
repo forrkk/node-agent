@@ -20,6 +20,7 @@ const (
 		exec docker run --rm -v /etc/ssl/certs/:/etc/ssl/certs \
 		-v /opt/etcd/data:/default.etcd \
 		-p 127.0.0.1:4001:2379 -p 127.0.0.1:2379:2379 \
+		-p 172.17.0.1:4001:2379 -p 172.17.0.1:2379:2379 \
 		--hostname etcd --name etcd quay.io/coreos/etcd \
 		--listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 \
 		--advertise-client-urls http://127.0.0.1:2379,http://127.0.0.1:4001,http://etcd.wodby.wodby.local:4001,http://etcd.wodby.wodby.local:2379 \

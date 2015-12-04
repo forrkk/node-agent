@@ -16,14 +16,14 @@ const (
 	respawn
 	kill timeout 5
 	script
-		exec /opt/kubernetes/bin/kube-apiserver \
+		exec /opt/kubernetes/bin/hyperkube apiserver \
 		--bind-address=127.0.0.1 \
         --insecure_bind_address=127.0.0.1 \
         --allow_privileged=true \
         --insecure_port=8080 \
         --kubelet_https=true \
         --secure_port=6443 \
-        --portal_net=172.20.0.0/14 \
+        --service-cluster-ip-range=172.20.0.0/14 \
         --etcd_servers=http://127.0.0.1:4001 \
         --logtostderr=true \
         --profiling=false \
@@ -37,14 +37,12 @@ const (
 	respawn
 	kill timeout 5
 	script
-		exec /opt/kubernetes/bin/kube-controller-manager \
-        --machines=127.0.0.1 \
+		exec /opt/kubernetes/bin/hyperkube controller-manager \
         --master=127.0.0.1:8080 \
         --concurrent-endpoint-syncs=10 \
         --node-monitor-grace-period=3m \
         --node-monitor-period=60s \
         --node-startup-grace-period=5m \
-        --node-memory=1Gi \
         --resource-quota-sync-period=1m \
         --logtostderr=true
 	end script`
@@ -54,7 +52,7 @@ const (
 	respawn
 	kill timeout 5
 	script
-		exec /opt/kubernetes/bin/kube-scheduler --master=127.0.0.1:8080 --profiling=false
+		exec /opt/kubernetes/bin/hyperkube scheduler --master=127.0.0.1:8080 --profiling=false
 	end script`
 	kubeProxyUpstartScript = `description "Kubernetes Proxy Service"
 	start on runlevel [2345]
@@ -63,7 +61,7 @@ const (
 	respawn
 	kill timeout 5
 	script
-		exec /opt/kubernetes/bin/kube-proxy \
+		exec /opt/kubernetes/bin/hyperkube proxy \
 		--master=127.0.0.1:8080 \
 		--logtostderr=true
 	end script`
@@ -73,7 +71,7 @@ const (
 	respawn
 	kill timeout 5
 	script
-		exec /opt/kubernetes/bin/kubelet \
+		exec /opt/kubernetes/bin/hyperkube kubelet \
         --address=127.0.0.1 \
         --port=10250 \
         --hostname_override=127.0.0.1 \
@@ -87,7 +85,6 @@ const (
         --enable-debugging-handlers=false \
         --global_housekeeping_interval=10m \
         --housekeeping_interval=1m \
-        --max_housekeeping_interval=1h \
         --node-status-update-frequency=60s \
         --sync-frequency=15s \
         --cluster-domain=wodby.local \
@@ -98,20 +95,16 @@ const (
 func downloadKubernetes() error {
 	_ = os.MkdirAll("/opt/kubernetes/bin", 0755)
 	_ = os.MkdirAll("/opt/kubernetes/etc", 0644)
-	files := []string{"kube-apiserver",
+	files := []string{
+		"hyperkube",
 		"kubectl",
-		"kube-controller-manager",
-		"kube-scheduler",
-		"kube-proxy",
-		"kubelet"}
+	}
 	for i := range files {
 		file, err := os.OpenFile("/opt/kubernetes/bin/"+files[i], os.O_CREATE|os.O_RDWR, 0755)
-		defer file.Close()
 		if err != nil {
 			return err
 		}
-		resp, err := http.Get("http://sfo.registry.wodby.com:81/releases/kubernetes/v0.16.0/bin/linux/amd64/" + files[i])
-		defer resp.Body.Close()
+		resp, err := http.Get("https://storage.googleapis.com/kubernetes-release/release/v1.1.2/bin/linux/amd64/" + files[i])
 		if err != nil {
 			return err
 		}
@@ -119,6 +112,8 @@ func downloadKubernetes() error {
 		if err != nil {
 			return err
 		}
+		resp.Body.Close()
+		file.Close()
 	}
 	err := ioutil.WriteFile("/opt/kubernetes/etc/policy.json", []byte(`{"user":"wodby-agent"}`), 0600)
 	if err != nil {

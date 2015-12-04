@@ -8,17 +8,16 @@ import (
 
 const (
 	wodbyNS = `{
-"apiVersion":"v1beta3",
+"apiVersion":"v1",
 "kind": "Namespace",
-"metadata": {"name": "wodby"},
-"status": {"phase": "Active"},
-"labels": {"name": "wodby"}
+"metadata": {"name": "wodby"}
 }`
 	wodbyETCDsvc = `{
         "kind": "Service",
-        "apiVersion": "v1beta3",
+        "apiVersion": "v1",
         "metadata": {
           "name": "etcd",
+          "namespace": "wodby",
           "labels": {
             "name": "etcd"
           }
@@ -36,14 +35,14 @@ const (
       }`
     wodbyETCDenp = `{
         "kind": "Endpoints",
-        "apiVersion": "v1beta3",
+        "apiVersion": "v1",
         "metadata": {
           "name": "etcd"
         },
         "subsets": [
           {
             "addresses": [
-              { "IP": "127.0.0.1" }
+              { "IP": "172.17.0.1" }
             ],
             "ports": [
               {
@@ -57,7 +56,7 @@ const (
       }`
 	wodbySvc = `{
         "kind": "Service",
-        "apiVersion": "v1beta3",
+        "apiVersion": "v1",
         "metadata": {
           "name": "wodby-svc",
           "labels": {
@@ -99,13 +98,13 @@ const (
     wodbyGetDNSSvcIP = `#!/bin/sh
       while [ -z ${dnsSvcIp} ];do
         sleep 1
-        dnsSvcIp=$(/opt/kubernetes/bin/kubectl --namespace=wodby get svc wodby-svc | grep wodby-svc | awk '{print $4}')
+        dnsSvcIp=$(/opt/kubernetes/bin/kubectl --namespace=wodby get svc wodby-svc | grep wodby-svc | awk '{print $2}')
       done
       echo "${dnsSvcIp}" > /opt/wodby/etc/dns_svc_ip`
     wodbyGetETCDSvcIP = `#!/bin/sh
       while [ -z ${etcSvcIp} ];do
         sleep 1
-        etcSvcIp=$(/opt/kubernetes/bin/kubectl --namespace=wodby get svc etcd | grep etcd | awk '{print $4}')
+        etcSvcIp=$(/opt/kubernetes/bin/kubectl --namespace=wodby get svc etcd | grep etcd | awk '{print $2}')
       done
       echo "${etcSvcIp}" > /opt/wodby/etc/etcd_svc_ip`
 )
